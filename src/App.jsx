@@ -52,13 +52,25 @@ export default function App() {
 
   return (
     <>
-      <Navbar animes={animes} />
-      <Main animes={animes} onSelectedAnime={handleSelectedAnime} selectedAnime={selectedAnime} />
+      <Navbar>
+        <InputSearch />
+        <SearchResultNum animes={animes} />
+      </Navbar>
+      <Main>
+        <Box>
+          <AnimeList animes={animes} onSelectedAnime={handleSelectedAnime} />
+        </Box>
+        <Box>
+          <selectedAnime>
+            <Details selectedAnime={selectedAnime} />
+          </selectedAnime>
+        </Box>
+      </Main>
     </>
   );
 }
 
-function Navbar({animes}) {
+function Navbar({ children }) {
   return (
     <nav className="nav-bar">
       <div className="logo">
@@ -66,10 +78,7 @@ function Navbar({animes}) {
         <h1>WeeBoo</h1>
         <span role="img">🍥</span>
       </div>
-      <div className="search-container">
-        <InputSearch />
-        <SearchResultNum animes={animes} />
-      </div>
+      <div className="search-container">{children}</div>
     </nav>
   );
 }
@@ -88,7 +97,7 @@ function InputSearch() {
   );
 }
 
-function SearchResultNum({animes}) {
+function SearchResultNum({ animes }) {
   return (
     <p className="search-results">
       Found <strong>{animes.length}</strong> results
@@ -96,17 +105,12 @@ function SearchResultNum({animes}) {
   );
 }
 
-function Main({animes, onSelectedAnime, selectedAnime}) {
-    return (
-    <main className="main">
-      <ListBox animes={animes} onSelectedAnime={onSelectedAnime} />
-      <SelectedBox selectedAnime={selectedAnime} />
-    </main>
-  );
+function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
-function ListBox({ animes, onSelectedAnime }) {
-  const [isOpen1, setIsOpen1] = useState(true);
+function Box({ children }) {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="box">
@@ -114,11 +118,9 @@ function ListBox({ animes, onSelectedAnime }) {
         className="btn-toggle"
         onClick={() => setIsOpen1((open) => !open)}
       >
-        {isOpen1 ? "–" : "+"}
+        {isOpen ? "–" : "+"}
       </button>
-      {isOpen1 && (
-        <AnimeList animes={animes} onSelectedAnime={onSelectedAnime} />
-      )}
+      {isOpen && children}
     </div>
   );
 }
@@ -151,38 +153,23 @@ function Anime({ anime, onSelectedAnime }) {
   );
 }
 
-function SelectedBox({ selectedAnime }) {
-  const [isOpen2, setIsOpen2] = useState(true);
-
+function Details({ selectedAnime }) {
   return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-      {isOpen2 && (
-        <div className="details">
-          <header>
-            <img
-              src={selectedAnime.image}
-              alt={`${selectedAnime.title} cover`}
-            />
-            <div className="details-overview">
-              <h2>{selectedAnime.title}</h2>
-              <p>
-                {selectedAnime.year} &bull; {selectedAnime.score}
-              </p>
-            </div>
-          </header>
-          <section>
-            <p>
-              <em>{selectedAnime.synopsis}</em>
-            </p>
-          </section>
+    <div className="details">
+      <header>
+        <img src={selectedAnime.image} alt={`${selectedAnime.title} cover`} />
+        <div className="details-overview">
+          <h2>{selectedAnime.title}</h2>
+          <p>
+            {selectedAnime.year} &bull; {selectedAnime.score}
+          </p>
         </div>
-      )}
+      </header>
+      <section>
+        <p>
+          <em>{selectedAnime.synopsis}</em>
+        </p>
+      </section>
     </div>
   );
 }
