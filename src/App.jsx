@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import "./App.css";
+import Navbar from "./components/Navbar";
+import { InputSearch } from "./components/InputSearch";
+import SearchResultNum from "./components/SearchResultNum";
+import { Main } from "./components/Main";
+import { Box } from "./components/Box";
+import { AnimeList } from "./components/AnimeList";
+import { SelectedAnimeDetails } from "./components/SelectedAnimeDetails";
 
 const animesData = [
   {
@@ -61,115 +68,9 @@ export default function App() {
           <AnimeList animes={animes} onSelectedAnime={handleSelectedAnime} />
         </Box>
         <Box>
-          <selectedAnime>
-            <Details selectedAnime={selectedAnime} />
-          </selectedAnime>
+            <SelectedAnimeDetails selectedAnime={selectedAnime} />
         </Box>
       </Main>
     </>
-  );
-}
-
-function Navbar({ children }) {
-  return (
-    <nav className="nav-bar">
-      <div className="logo">
-        <span role="img">🍥</span>
-        <h1>WeeBoo</h1>
-        <span role="img">🍥</span>
-      </div>
-      <div className="search-container">{children}</div>
-    </nav>
-  );
-}
-
-function InputSearch() {
-  const [query, setQuery] = useState("");
-
-  return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search anime..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-    />
-  );
-}
-
-function SearchResultNum({ animes }) {
-  return (
-    <p className="search-results">
-      Found <strong>{animes.length}</strong> results
-    </p>
-  );
-}
-
-function Main({ children }) {
-  return <main className="main">{children}</main>;
-}
-
-function Box({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
-
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen1((open) => !open)}
-      >
-        {isOpen ? "–" : "+"}
-      </button>
-      {isOpen && children}
-    </div>
-  );
-}
-
-function AnimeList({ animes, onSelectedAnime }) {
-  return (
-    <ul className="list list-anime">
-      {animes?.map((anime) => (
-        <Anime
-          key={anime.mal_id}
-          anime={anime}
-          onSelectedAnime={onSelectedAnime}
-        />
-      ))}
-    </ul>
-  );
-}
-
-function Anime({ anime, onSelectedAnime }) {
-  return (
-    <li onClick={() => onSelectedAnime(anime.mal_id)}>
-      <img src={anime.image} alt={`${anime.title} cover`} />
-      <h3>{anime.title}</h3>
-      <div>
-        <p>
-          <span>{anime.year}</span>
-        </p>
-      </div>
-    </li>
-  );
-}
-
-function Details({ selectedAnime }) {
-  return (
-    <div className="details">
-      <header>
-        <img src={selectedAnime.image} alt={`${selectedAnime.title} cover`} />
-        <div className="details-overview">
-          <h2>{selectedAnime.title}</h2>
-          <p>
-            {selectedAnime.year} &bull; {selectedAnime.score}
-          </p>
-        </div>
-      </header>
-      <section>
-        <p>
-          <em>{selectedAnime.synopsis}</em>
-        </p>
-      </section>
-    </div>
   );
 }
